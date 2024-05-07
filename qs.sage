@@ -20,6 +20,7 @@ def generate_factor_base(N, B):
     
     return factor_base
 
+# Constructs a sieve using the chosen polynomial Y(X) = (X + ceil(sqrt(N))^2 - N
 def construct_sieve(N):
     sieve = list()
     n_sqrt = ceil(sqrt(N))
@@ -74,6 +75,7 @@ def find_smooth(N, B, fb):
         for i in range(start, len(values), 2):
             values[i] //= 2
 
+    # For every p in the factor base, we sieve every pth value of the sieve starting from the values returned by Tonelli-Shanks
     for f in fb[1:]:
         residues = tonelli(N, f)
         indices = [mod(residues[0] - ceil(sqrt(N)), f), mod(residues[1] - ceil(sqrt(N)), f)]
@@ -82,6 +84,7 @@ def find_smooth(N, B, fb):
             for j in range(i, len(values), f):
                 values[j] //= f
 
+    # Create a list of the found smooth values
     for i in range(0, len(values)):
         if values[i] == 1:
             smooth_values.append(original_values[i])
@@ -98,25 +101,31 @@ def build_matrix(smooth_values, fb):
 
     return m
 
+# Returns the left nullspace of the given matrix m
 def solve_matrix(m):
     soln = m.kernel()
     return list(soln[1])
 
+# Using the matrix solution, 
 def find_factors(N, smv, soln):
     a = 1
+    # Multiply smooth values together to get one side of a congruence of squares
     for v in range(0, len(smv)):
         if soln[v] == 1:
             a *= smv[v]
     a = isqrt(a)
 
+    # Re-calculate initial values from polynomial in the form of X + 124
     vals = list()
     for sm in smv:
         vals.append(isqrt(N + sm))
-
+    
     b = 1
+    # Multiply initial values together to find the other side of the congruence of squares
     for v in vals:
         b *= v
 
+    # Calculate GCD with N of each resulting part of the difference of squares
     f1 = gcd(b + a, N)
     f2 = gcd(b - a, N)
     
