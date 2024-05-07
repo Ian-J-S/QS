@@ -29,33 +29,34 @@ def construct_sieve(N):
 
     return sieve
 
+# Uses Tonelli-Shanks algorithm to solve relation of the form X^2 === N (mod p)
 def tonelli(n, p):
     q = p - 1
     s = 0
-    while q % 2 == 0:
+    while mod(q, 2) == 0:
         q //= 2
         s += 1
     if s == 1:
-        r = pow(n, (p + 1) // 4, p)
-        return r,p-r
+        r = mod(n, p)^((p + 1) // 4)
+        return r, p - r
     for z in range(2, p):
         if p - 1 == euler_criterion(z, p):
             break
-    c = pow(z, q, p)
-    r = pow(n, (q + 1) // 2, p)
-    t = pow(n, q, p)
+    c = mod(z, p)^q
+    r = mod(n, p)^((q + 1) // 2)
+    t = mod(n, p)^q
     m = s
     t2 = 0
-    while (t - 1) % p != 0:
-        t2 = (t * t) % p
+    while mod(t - 1, p) != 0:
+        t2 = mod(t * t, p)
         for i in range(1, m):
-            if (t2 - 1) % p == 0:
+            if mod(t2 - 1, p) == 0:
                 break
-            t2 = (t2 * t2) % p
-        b = pow(c, 1 << (m - i - 1), p)
-        r = (r * b) % p
-        c = (b * b) % p
-        t = (t * c) % p
+            t2 = mod(t2 * t2, p)
+        b = mod(c, p)^(1 << (m - i - 1))
+        r = mod(r * b, p)
+        c = mod(b * b, p)
+        t = mod(t * c, p)
         m = i
 
     return (r, p-r)
