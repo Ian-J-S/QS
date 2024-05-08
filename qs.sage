@@ -106,7 +106,7 @@ def solve_matrix(m):
     soln = m.kernel()
     return list(soln[1])
 
-# Using the matrix solution, 
+# Using the matrix solution and smooth values, find factors of N
 def find_factors(N, smv, soln):
     a = 1
     # Multiply smooth values together to get one side of a congruence of squares
