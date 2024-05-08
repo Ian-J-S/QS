@@ -138,10 +138,10 @@ def qs(N):
     B = smoothness_bound(N)
     print(f"Smoothness bound: {B}")
 
-    # Use sieving to locate prime_pi(B) + 1 B-smooth numbers
+    # Use sieving to locate prime_pi(B) + 1 potentially B-smooth numbers
     sieve = construct_sieve(N)
 
-    # Factor the smooth numbers and generate exponent vectors mod 2
+    # Factor the numbers and generate exponent vectors mod 2
     fb = generate_factor_base(N, B)
     print(f"Factor base: {fb}")
 
